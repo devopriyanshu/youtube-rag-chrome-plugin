@@ -33,6 +33,28 @@ def format_context(docs):
     return "\n".join(formatted)
 
 
+def format_metadata(docs):
+    if not docs:
+        return ""
+    d = docs[0]
+    title = d.metadata.get("title", "")
+    channel = d.metadata.get("channel", "")
+    views = d.metadata.get("views", "")
+    published_at = d.metadata.get("published_at", "")
+    description = d.metadata.get("description", "")
+    
+    meta_lines = []
+    if title: meta_lines.append(f"Video Title: {title}")
+    if channel: meta_lines.append(f"Channel: {channel}")
+    if views: meta_lines.append(f"Views: {views}")
+    if published_at: meta_lines.append(f"Published At: {published_at}")
+    if description: meta_lines.append(f"Description:\n{description}")
+    
+    if meta_lines:
+        return "\n".join(meta_lines) + "\n\n"
+    return ""
+
+
 def generate_answer(session_id, question, docs):
 
     llm = get_llm()
@@ -45,12 +67,13 @@ def generate_answer(session_id, question, docs):
 
     # Sort documents chronologically by their start time
     sorted_docs = sorted(docs, key=get_start_time)
+    video_metadata_str = format_metadata(sorted_docs)
     context = format_context(sorted_docs)
     chat_history = get_history(session_id)
 
     messages = [
         SystemMessage(content=SYSTEM_PROMPT),
-        SystemMessage(content=f"Transcript Context:\n{context}")
+        SystemMessage(content=f"Video Metadata:\n{video_metadata_str}Transcript Context:\n{context}")
     ]
 
     for msg in chat_history:

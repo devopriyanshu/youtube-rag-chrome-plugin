@@ -1,5 +1,8 @@
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from dotenv import load_dotenv
-load_dotenv()
+from langchain_huggingface import HuggingFaceEmbeddings
+
 def get_embeddings():
-    return GoogleGenerativeAIEmbeddings(model='models/gemini-embedding-001')
+    return HuggingFaceEmbeddings(
+        model_name="BAAI/bge-small-en-v1.5",
+        model_kwargs={"device": "cpu"},  
+        encode_kwargs={"normalize_embeddings": True}
+    )
