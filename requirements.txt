@@ -19,3 +19,4 @@ langchain-text-splitters
 cachetools
 google-api-python-client
 pydantic
+sentence-transformers
