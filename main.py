@@ -12,7 +12,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router)if __name__ == "__main__":
+app.include_router(router)
+
+if __name__ == "__main__":
     import uvicorn
     import os
     port = int(os.environ.get("PORT", 8000))
